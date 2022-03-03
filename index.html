@@ -4,8 +4,26 @@
     <title>Tree View</title>
     <script src="https://unpkg.com/vue@2"></script>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="/style.css"/>
+    <style>
+        body {
+            font-family: Menlo, Consolas, monospace;
+            color: #444;
+        }
 
+        .item {
+            cursor: pointer;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        ul {
+            padding-left: 1.5em;
+            line-height: 1.5em;
+            list-style-type: dot;
+        }
+    </style>
     <!-- item template -->
     <script type="text/x-template" id="item-template">
         <li>
