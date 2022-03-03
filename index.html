@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/vue@next"></script>
+    <meta charset="UTF-8">
+    <title>书签</title>
+</head>
+<body>
+<div id="counter">
+
+    <div v-if="isFinished" v-for="bookmark in books.bookmarks">
+        <!--        <div v-if="bookmark.children">-->
+        <!--            <div v-for="book in bookmark.children">-->
+        <!--                <div v-if="book.children">-->
+        <!--                    {{book.title}}-->
+        <!--                </div>-->
+        <!--                <div v-if="book.url">-->
+        <!--                    <a v-bind:href="book.url" target="_blank">{{book.title}}</a>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <children :child="bookmark"></children>
+    </div>
+
+</div>
+
+
+</body>
+<script>
+    const Counter = {
+        data() {
+            return {
+                requestOptions: {
+                    method: 'GET',
+                    redirect: 'follow'
+                },
+                isFinished: false,
+                books: {}
+            }
+        },
+        methods: {
+            getData() {
+                fetch("https://gist.githubusercontent.com/CHEN1016/eabafdea76b55aac4c27793774f911c6/raw/b15bc7a93f1155b3f544c517ed3d2fbad5a2aab4/BookmarkHub", this.requestOptions)
+                    .then(response => response.json())
+                    .then(json => {
+                        console.log('in....')
+                        this.books = json
+                        this.isFinished = true
+                        console.log(json)
+                        return json
+                    })
+                    .catch(error => console.log('error', error));
+            }
+        },
+        mounted() {
+            this.getData()
+        }
+    }
+    const app = Vue.createApp(Counter)
+    app.component('children', {
+        props: {
+            child: Object
+        },
+        template: `
+          <!--          {{child.title}}-->
+          <div v-for="book in child.children">
+          <div v-if="book.children">
+            <children :child="book"></children>
+          </div>
+          <div v-if="book.url">
+            <a v-bind:href="book.url" target="_blank">{{ book.title }}</a>
+          </div>
+          </div>
+        `
+    })
+    app.mount('#counter')
+</script>
+
+</html>
