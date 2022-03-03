@@ -37,9 +37,9 @@
                     @click="toggle"
                     @dblclick="makeFolder">
                 {{ item.title }}
-                <span v-if="isFolder">[{{ isOpen ? '-' : '+' }}]</span>
+                <span v-if="isFolder && item.title!=='ToolbarFolder'">[{{ isOpen ? '-' : '+' }}]</span>
             </div>
-            <ul v-show="isOpen" v-if="isFolder">
+            <ul v-show="isOpen || item.title==='ToolbarFolder'" v-if="isFolder">
                 <tree-item
                         class="item"
                         v-for="(child, index) in item.children"
