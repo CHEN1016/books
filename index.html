@@ -8,7 +8,7 @@
         body {
             font-family: Menlo, Consolas, monospace;
             color: #444;
-            font-size: 225%;
+            font-size: 220%;
         }
 
         div, ul {
@@ -25,7 +25,7 @@
 
         ul {
             padding-left: 2.5em;
-            /*line-height: 1.5em;*/
+            line-height: 1.5em;
             list-style-type: decimal;
         }
     </style>
@@ -156,10 +156,10 @@
                     .then(response => response.json())
                     .then(json => {
                         console.log('in....')
-                        this.books = json['bookmarks'][0]
-                        this.treeData = this.books
+                        // this.books = json['bookmarks'][0]
+                        this.treeData = json['bookmarks'][0]
                         this.isFinished = true
-                        console.log(this.books)
+                        // console.log(this.books)
                         return json
                     })
                     .catch(error => console.log('error', error));
