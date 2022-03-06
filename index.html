@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>书签</title>
+    <title>Gist书签</title>
     <script src="https://unpkg.com/vue@2"></script>
     <meta charset="UTF-8">
     <style>
@@ -70,29 +70,10 @@
 <script>
     // demo data
     var treeData = {
-        title: "ToolbarFolder",
-        children: [
-            {
-                title: "hello",
-                url: "https://www.baidu.com"
-            },
-            {title: "wat"},
-            {
-                title: "child folder",
-                children: [
-                    {
-                        title: "child folder",
-                        children: [{title: "hello"}, {title: "wat"}]
-                    },
-                    {title: "hello"},
-                    {title: "wat"},
-                    {
-                        title: "child folder",
-                        children: [{title: "hello"}, {title: "wat"}]
-                    }
-                ]
-            }
-        ]
+        title: "正在加载数据...",
+        // children: [
+        //     {title: "正在加载数据..."}
+        // ]
     };
 
     // define the tree-item component
@@ -138,7 +119,12 @@
         el: "#demo",
         data: {
             isFinished: false,
-            treeData: treeData
+            treeData: treeData,
+            requestOptions: {
+                method: 'GET',
+                redirect: 'follow'
+            }
+
         },
         methods: {
             makeFolder: function (item) {
@@ -152,15 +138,27 @@
                 });
             },
             getData() {
-                fetch("https://gist.githubusercontent.com/CHEN1016/eabafdea76b55aac4c27793774f911c6/raw/b15bc7a93f1155b3f544c517ed3d2fbad5a2aab4/BookmarkHub", this.requestOptions)
+                const myHeaders = new Headers();
+                myHeaders.append("Authorization", "Basic Y2hlbjEwMTY6Z2hwX3B2Y1RoVFFCOVFKWDQ2NTQzYW1xa0JMTExXNUNoQzNwVjU1RA==");
+                const authRequestOptions = {
+                    method: 'GET',
+                    headers: myHeaders,
+                    redirect: 'follow'
+                };
+                fetch("https://api.github.com/gists", authRequestOptions)
                     .then(response => response.json())
                     .then(json => {
-                        console.log('in....')
-                        // this.books = json['bookmarks'][0]
-                        this.treeData = json['bookmarks'][0]
-                        this.isFinished = true
-                        // console.log(this.books)
-                        return json
+                        const raw_url = json[0]['files']['BookmarkHub']['raw_url']
+                        console.log('raw_url', raw_url)
+                        fetch(raw_url, this.requestOptions)
+                            .then(response => response.json())
+                            .then(json => {
+                                console.log('get gist data....')
+                                this.treeData = json['bookmarks'][0]
+                                this.isFinished = true
+                                return json
+                            })
+                            .catch(error => console.log('error', error));
                     })
                     .catch(error => console.log('error', error));
             }
