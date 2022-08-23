@@ -138,27 +138,14 @@
                 });
             },
             getData() {
-                const myHeaders = new Headers();
-                myHeaders.append("Authorization", "Basic Y2hlbjEwMTY6Z2hwX3B2Y1RoVFFCOVFKWDQ2NTQzYW1xa0JMTExXNUNoQzNwVjU1RA==");
-                const authRequestOptions = {
-                    method: 'GET',
-                    headers: myHeaders,
-                    redirect: 'follow'
-                };
-                fetch("https://api.github.com/gists", authRequestOptions)
+                fetch("https://api.github.com/gists/eabafdea76b55aac4c27793774f911c6", this.requestOptions)
                     .then(response => response.json())
                     .then(json => {
-                        const raw_url = json[0]['files']['BookmarkHub']['raw_url']
-                        console.log('raw_url', raw_url)
-                        fetch(raw_url, this.requestOptions)
-                            .then(response => response.json())
-                            .then(json => {
-                                console.log('get gist data....')
-                                this.treeData = json['bookmarks'][0]
-                                this.isFinished = true
-                                return json
-                            })
-                            .catch(error => console.log('error', error));
+                        console.log('get gist data....')
+                        let content = json['files']['BookmarkHub']['content']
+                        this.treeData = JSON.parse(content)['bookmarks'][0]
+                        this.isFinished = true
+                        return json
                     })
                     .catch(error => console.log('error', error));
             }
