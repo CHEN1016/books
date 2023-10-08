@@ -143,9 +143,17 @@
                     .then(json => {
                         console.log('get gist data....')
                         let content = json['files']['BookmarkHub']['content']
-                        this.treeData = JSON.parse(content)['bookmarks'][0]
-                        this.isFinished = true
-                        return json
+                        let trees = JSON.parse(content)['bookmarks']
+                        for (const item of trees){
+                            if (const.title === 'ToolbarFolder'){
+                                this.treeData = item
+                                this.isFinished = true
+                                return json
+                            }
+                        }
+                        // this.treeData = JSON.parse(content)['bookmarks'][0]
+                        // this.isFinished = true
+                        // return json
                     })
                     .catch(error => console.log('error', error));
             }
