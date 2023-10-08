@@ -144,8 +144,8 @@
                         console.log('get gist data....')
                         let content = json['files']['BookmarkHub']['content']
                         let trees = JSON.parse(content)['bookmarks']
-                        for (var item of trees){
-                            if (const.title === 'ToolbarFolder'){
+                        for (const item of trees){
+                            if (item.title === 'ToolbarFolder'){
                                 this.treeData = item
                                 this.isFinished = true
                                 return json
